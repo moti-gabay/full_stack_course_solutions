@@ -1,0 +1,10 @@
+{
+  "name": "ex-1-1-hello-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node hello.js",
+    "test": "node --test"
+  }
+}

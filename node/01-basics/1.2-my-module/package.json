@@ -1,0 +1,10 @@
+{
+  "name": "ex-1-2-my-module",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node --test"
+  }
+}

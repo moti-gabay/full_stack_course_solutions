@@ -1,0 +1,10 @@
+{
+  "name": "ex-1-3-word-counter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node counter.js sample.txt",
+    "test": "node --test"
+  }
+}
