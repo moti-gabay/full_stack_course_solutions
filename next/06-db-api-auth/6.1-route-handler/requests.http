@@ -1,0 +1,25 @@
+@base = http://localhost:3000
+
+### כל המתכונים
+GET {{base}}/api/recipes
+
+### יצירת מתכון
+POST {{base}}/api/recipes
+Content-Type: application/json
+
+{
+  "title": "פסטה ברוטב עגבניות",
+  "ingredients": ["פסטה", "עגבניות", "שום"],
+  "prepMinutes": 25
+}
+
+### גוף לא תקין (מחזיר 400)
+POST {{base}}/api/recipes
+Content-Type: application/json
+
+{
+  "title": "ab"
+}
+
+### הרשימה כוללת עכשיו את המתכון החדש
+GET {{base}}/api/recipes
