@@ -1,0 +1,58 @@
+@base = http://localhost:3000/api/recipes
+
+### יצירת מתכון (201)
+# @name create
+POST {{base}}
+Content-Type: application/json
+
+{
+  "title": "שקשוקה",
+  "ingredients": ["ביצים", "עגבניות"],
+  "difficulty": "easy",
+  "prepMinutes": 20
+}
+
+### המזהה שחזר מה-POST, לבקשות הבאות
+@id = {{create.response.body._id}}
+
+### כל המתכונים (200)
+GET {{base}}
+
+### מתכון אחד (200)
+GET {{base}}/{{id}}
+
+### מזהה תקין שלא קיים (404)
+GET {{base}}/000000000000000000000000
+
+### מזהה לא תקין (400, CastError)
+GET {{base}}/abc
+
+### title של 2 תווים (400, ValidationError)
+POST {{base}}
+Content-Type: application/json
+
+{ "title": "אב" }
+
+### difficulty לא חוקי ו-prepMinutes 0 (400)
+POST {{base}}
+Content-Type: application/json
+
+{ "title": "פסטה", "difficulty": "extreme", "prepMinutes": 0 }
+
+### עדכון חלקי (200)
+PATCH {{base}}/{{id}}
+Content-Type: application/json
+
+{ "prepMinutes": 25 }
+
+### עדכון מתכון שלא קיים (404)
+PATCH {{base}}/000000000000000000000000
+Content-Type: application/json
+
+{ "prepMinutes": 25 }
+
+### מחיקה (204)
+DELETE {{base}}/{{id}}
+
+### אחרי המחיקה (404)
+GET {{base}}/{{id}}

@@ -1,0 +1,17 @@
+{
+  "name": "ex-4-1-first-connection",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=.env --watch index.js",
+    "start": "node --env-file=.env index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "mongoose": "^9.11.3"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.3.0"
+  }
+}
