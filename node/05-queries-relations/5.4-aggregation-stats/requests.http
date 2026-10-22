@@ -1,0 +1,103 @@
+@base = http://localhost:3000/api/recipes
+
+### יצירת מתכון (201)
+# @name create
+POST {{base}}
+Content-Type: application/json
+
+{
+  "title": "שקשוקה",
+  "ingredients": ["ביצים", "עגבניות"],
+  "difficulty": "easy",
+  "prepMinutes": 20
+}
+
+### המזהה שחזר מה-POST, לבקשות הבאות
+@id = {{create.response.body._id}}
+
+### כל המתכונים (200)
+GET {{base}}
+
+### סינון ומיון משולבים (200)
+GET {{base}}?difficulty=easy&maxTime=30&sort=-createdAt
+
+### עימוד וחיפוש (200)
+GET {{base}}?page=2&limit=10&q=pasta
+
+### limit גדול מ-50 מוגבל ל-50
+GET {{base}}?limit=100
+
+### פרמטר לא תקין (400)
+GET {{base}}?difficulty=x
+
+### פרמטר לא תקין (400)
+GET {{base}}?maxTime=abc
+
+### מתכון אחד (200)
+GET {{base}}/{{id}}
+
+### מזהה תקין שלא קיים (404)
+GET {{base}}/000000000000000000000000
+
+### מזהה לא תקין (400, CastError)
+GET {{base}}/abc
+
+### title של 2 תווים (400, ValidationError)
+POST {{base}}
+Content-Type: application/json
+
+{ "title": "אב" }
+
+### difficulty לא חוקי ו-prepMinutes 0 (400)
+POST {{base}}
+Content-Type: application/json
+
+{ "title": "פסטה", "difficulty": "extreme", "prepMinutes": 0 }
+
+### עדכון חלקי (200)
+PATCH {{base}}/{{id}}
+Content-Type: application/json
+
+{ "prepMinutes": 25 }
+
+### עדכון מתכון שלא קיים (404)
+PATCH {{base}}/000000000000000000000000
+Content-Type: application/json
+
+{ "prepMinutes": 25 }
+
+### אותה כותרת שוב: אותו slug (409)
+POST {{base}}
+Content-Type: application/json
+
+{ "title": "שקשוקה" }
+
+### PATCH עם ערך לא תקין (400, runValidators)
+PATCH {{base}}/{{id}}
+Content-Type: application/json
+
+{ "difficulty": "x" }
+
+### ביקורת חדשה (201): averageRating של המתכון מתעדכן
+POST {{base}}/{{id}}/reviews
+Content-Type: application/json
+
+{ "rating": 5, "comment": "מעולה" }
+
+### דירוג מחוץ לטווח 1-5 (400)
+POST {{base}}/{{id}}/reviews
+Content-Type: application/json
+
+{ "rating": 6 }
+
+### הדירוג הממוצע
+GET {{base}}/{{id}}
+
+### סטטיסטיקות
+GET http://localhost:3000/api/stats
+
+### מחיקה רכה (204)
+DELETE {{base}}/{{id}}
+
+### אחרי המחיקה: 404, והמתכון לא מופיע ברשימה
+GET {{base}}/{{id}}
