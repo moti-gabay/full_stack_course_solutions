@@ -1,0 +1,45 @@
+@base = http://localhost:3000/api/recipes
+
+### כל המתכונים (200)
+GET {{base}}
+
+### מתכון אחד (200)
+GET {{base}}/1
+
+### מתכון שלא קיים (404)
+GET {{base}}/999
+
+### יצירת מתכון (201)
+POST {{base}}
+Content-Type: application/json
+
+{
+  "title": "סלט ירקות",
+  "ingredients": ["מלפפון", "עגבנייה"],
+  "difficulty": "easy",
+  "prepMinutes": 10
+}
+
+### יצירה בלי title (400)
+POST {{base}}
+Content-Type: application/json
+
+{ "prepMinutes": 10 }
+
+### עדכון חלקי (200)
+PATCH {{base}}/1
+Content-Type: application/json
+
+{ "prepMinutes": 15 }
+
+### עדכון מתכון שלא קיים (404)
+PATCH {{base}}/999
+Content-Type: application/json
+
+{ "prepMinutes": 15 }
+
+### מחיקה (204)
+DELETE {{base}}/2
+
+### אחרי המחיקה (404)
+GET {{base}}/2
