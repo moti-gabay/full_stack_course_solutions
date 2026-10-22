@@ -63,7 +63,6 @@ test("a token signed with another secret returns 401", async () => {
 
 test("an expired token returns 401", async () => {
   const { user } = await registerAndLogin();
-  const expired = jwt.sign({ sub: user._id }, SECRET, { expiresIn: "1s" });
-  await new Promise((r) => setTimeout(r, 1100));
+  const expired = jwt.sign({ sub: user._id, exp: Math.floor(Date.now() / 1000) - 10 }, SECRET);
   assert.equal((await me(expired)).status, 401);
 });

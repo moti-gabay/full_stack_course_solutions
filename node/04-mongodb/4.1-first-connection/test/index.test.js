@@ -9,7 +9,7 @@ const run = promisify(execFile);
 let mongod, uri;
 
 before(async () => {
-  mongod = await MongoMemoryServer.create();
+  mongod = await MongoMemoryServer.create({ instance: { launchTimeout: 60_000 } });
   uri = mongod.getUri("library");
 });
 after(() => mongod.stop());

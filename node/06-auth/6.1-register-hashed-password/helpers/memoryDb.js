@@ -6,7 +6,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 export function useMemoryDb() {
   const db = {};
   before(async () => {
-    db.server = await MongoMemoryServer.create();
+    db.server = await MongoMemoryServer.create({ instance: { launchTimeout: 60_000 } });
     db.uri = db.server.getUri();
     await mongoose.connect(db.uri);
     await mongoose.syncIndexes();

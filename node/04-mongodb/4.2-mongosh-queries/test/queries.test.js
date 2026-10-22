@@ -8,7 +8,7 @@ let mongod, output;
 
 before(async () => {
   if (!hasMongosh) return;
-  mongod = await MongoMemoryServer.create();
+  mongod = await MongoMemoryServer.create({ instance: { launchTimeout: 60_000 } });
   output = execFileSync("mongosh", [mongod.getUri("library"), "--quiet", "queries.js"], {
     encoding: "utf8",
   });

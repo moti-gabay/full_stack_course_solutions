@@ -11,7 +11,6 @@ before(() => {
   process.env.REFRESH_TOKEN_SECRET = "test-refresh-secret";
 });
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const bearer = (token) => ({ Authorization: `Bearer ${token}` });
 
 // an agent keeps cookies between requests, like a browser
@@ -60,11 +59,11 @@ test("roles: a user gets 403 on an admin route, an admin gets 200", async () => 
 });
 
 test("refresh: after the access token expires, the cookie gets a new one", async (t) => {
-  process.env.ACCESS_TOKEN_TTL = "1s";
+  process.env.ACCESS_TOKEN_TTL = "-10s"; // the access token is already expired when issued
   t.after(() => delete process.env.ACCESS_TOKEN_TTL);
   const { agent, token } = await loggedIn();
+  delete process.env.ACCESS_TOKEN_TTL;
 
-  await sleep(1100);
   assert.equal((await agent.get("/auth/me").set(bearer(token))).status, 401);
 
   const refreshed = await agent.post("/auth/refresh");
